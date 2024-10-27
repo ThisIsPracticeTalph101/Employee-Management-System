@@ -1,7 +1,7 @@
 //type rfce to use react component snippet. Installed react snippet extension
 
 import React, { useEffect, useState }from 'react'
-import { listEmployees } from '../services/EmployeeService';
+import { deleteEmployee, listEmployees } from '../services/EmployeeService';
 import { useNavigate } from 'react-router-dom';
 
 function ListEmployeeComponent() {
@@ -10,12 +10,16 @@ function ListEmployeeComponent() {
     const navigator = useNavigate();
 
     useEffect(() => {
+       getAllEmployees();
+    }, [])
+
+    function getAllEmployees(){
         listEmployees().then((response) => {
             setEmployees(response.data);
         }).catch(error => {
             console.error(error);
         })
-    }, [])
+    }
 
     // const dummyData = [
     //     {
@@ -45,6 +49,16 @@ function ListEmployeeComponent() {
     function updateEmployee (id){
         navigator(`/edit-employee/${id}`)
     }
+
+    function removeEmployee(id){
+        console.log(id);
+        deleteEmployee(id).then((response) =>{
+        getAllEmployees();      
+        }).catch(error => {
+            console.error(error);
+
+        })
+    }
     
   return (
     <div className='container'>
@@ -70,6 +84,7 @@ function ListEmployeeComponent() {
                             <td>{employee.email}</td>
                             <td>
                                 <button class='btn btn-info' onClick={() => updateEmployee(employee.id)}>Update</button>
+                                <button class='btn btn-danger' onClick={() => removeEmployee(employee.id)} style={{marginLeft: '10px'}}>Delete</button>
                             </td>
 
                         </tr>

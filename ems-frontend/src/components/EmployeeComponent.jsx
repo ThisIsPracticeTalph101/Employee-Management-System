@@ -1,10 +1,7 @@
-import React, { useState } from "react";
-import { createEmployee } from "../services/EmployeeService";
+import React, { useState, useEffect } from "react";
+import { createEmployee, getEmployee, updateEmployee } from "../services/EmployeeService";
 import { useNavigate, useParams } from "react-router-dom";
 
-function newPush(){
-    
-}
 
 function EmployeeComponent() {
   const [firstName, setFirstName] = useState("");
@@ -21,6 +18,17 @@ function EmployeeComponent() {
 
   const navigator = useNavigate(); //helps navigate to path
 
+  useEffect(()=> {
+    if(id){
+        getEmployee(id).then((response) => {
+            setFirstName(response.data.firstName);
+            setLastName(response.data.lastName);
+            setEmail(response.data.email);
+
+        }).catch.error(error);
+    }
+  },
+[])
   function handleFirstName(e) {
     setFirstName(e.target.value);
   }
@@ -33,17 +41,35 @@ function EmployeeComponent() {
     setEmail(e.target.value);
   }
 
-  function saveEmployee(e) {
+  //add employee and update employee methods
+  function saveOrUpdateEmployee(e) {
     e.preventDefault();
 
     if(validateForm()){
+
         const employee = { firstName, lastName, email };
         console.log(employee);
+
+        if(id){
+            updateEmployee(id, employee).then((response) => {
+                console.log(response.data);
+                navigator('/employees');
+            }).catch(error => {
+                console.error(error);
+            });
+        }else {
+            //this is the add employee logic
+            createEmployee(employee).then((response) => {
+                console.log(response.data);
+                navigator('/employees')
+                //try setting the state back to empty instead of navigating to new page
+            }).catch(error => {
+                console.error(error);
+            })
+
+        }
+        
     
-        createEmployee(employee).then((response) => {
-            console.log(response.data);
-            navigator('/employees')
-        })
     }
 
   }
@@ -134,7 +160,7 @@ function EmployeeComponent() {
               {errors.email && <div class='invalid-feedback'>{errors.email}</div>}
             </div>
 
-            <button class="btn btn-success" onClick={saveEmployee}>
+            <button class="btn btn-success" onClick={saveOrUpdateEmployee}>
               Submit
             </button>
           </form>
