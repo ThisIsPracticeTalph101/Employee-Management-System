@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState }from 'react'
 import { listEmployees } from '../services/EmployeeService';
+import { useNavigate } from 'react-router-dom';
 
-function ListemployeeComponent() {
+function ListEmployeeComponent() {
 
     const [employees, setEmployees] = useState([]);
+    const navigator = useNavigate();
 
     useEffect(() => {
         listEmployees().then((response) => {
@@ -35,11 +37,19 @@ function ListemployeeComponent() {
     //         email: "tifftiff@gmail.com"
     //     }
     // ]
+    function addNewEmployee() {
+        navigator('/add-employee')
 
+    }
+
+    function updateEmployee (id){
+        navigator(`/edit-employee/${id}`)
+    }
     
   return (
     <div className='container'>
         <h2 class='text-center'>List of Employees</h2>
+        <button class='btn btn-primary mb-2' onClick={addNewEmployee}>Add Employee</button>
         <table class='table table-striped table-bordered'>
             <thead>
                 <tr>
@@ -47,6 +57,7 @@ function ListemployeeComponent() {
                     <th>Employee First Name</th>
                     <th>Employee Last Name</th>
                     <th>Employee Email</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,6 +68,9 @@ function ListemployeeComponent() {
                             <td>{employee.firstName}</td>
                             <td>{employee.lastName}</td>
                             <td>{employee.email}</td>
+                            <td>
+                                <button class='btn btn-info' onClick={() => updateEmployee(employee.id)}>Update</button>
+                            </td>
 
                         </tr>
                     ))
@@ -68,4 +82,4 @@ function ListemployeeComponent() {
   )
 }
 
-export default ListemployeeComponent
+export default ListEmployeeComponent
