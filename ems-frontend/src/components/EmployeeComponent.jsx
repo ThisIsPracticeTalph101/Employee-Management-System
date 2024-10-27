@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { createEmployee } from "../services/EmployeeService";
 import { useNavigate, useParams } from "react-router-dom";
 
+function newPush(){
+    
+}
+
 function EmployeeComponent() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
