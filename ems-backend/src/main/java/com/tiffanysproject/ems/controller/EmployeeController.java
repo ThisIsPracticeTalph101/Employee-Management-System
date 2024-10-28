@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//need for backend to show up in remote repo
-//added after code dissapeared
+//fixed the refactoring by removing .git folder from backend
 @CrossOrigin("*")
 @AllArgsConstructor //to not have to create a constructor manually
 @RestController
