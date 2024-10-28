@@ -25,7 +25,9 @@ function EmployeeComponent() {
             setLastName(response.data.lastName);
             setEmail(response.data.email);
 
-        }).catch.error(error);
+        }).catch(error => {
+          console.error(error);
+      });
     }
   },
 [])
